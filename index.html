@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Website Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jaldi:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Jaldi', sans-serif;
+      background: #f8fafc;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      min-height: calc(100vh - 40px);
+      gap: 40px;
+    }
+
+    /* Left Side - Branding */
+    .branding-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .logo-icon {
+      /* border: 1px solid #ececec; */
+      border-radius: 8px;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .logo-text {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .main-heading {
+      font-size: 48px;
+      font-weight: 700;
+      color: #1f2937;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .sub-heading {
+      text-align: left;
+      font-size: 27px;
+      color: #111111;
+      margin-bottom: 40px;
+    }
+
+    .contact-info {
+      color: #262626;
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    .contact-info div {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .visit-link {
+      color: #4f46e5;
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 16px;
+    }
+
+    .visit-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Right Side - Form */
+    .form-side {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .form-container {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+    }
+
+    h2 {
+      margin-bottom: 8px;
+      font-size: 28px;
+      color: #1f2937;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    p {
+      margin-bottom: 32px;
+      font-size: 16px;
+      color: #6b7280;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #374151;
+      font-size: 16px;
+    }
+
+    input[type="text"], 
+    input[type="email"] {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      font-size: 16px;
+      font-family: 'Jaldi', sans-serif;
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus, 
+    input[type="email"]:focus {
+      outline: none;
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+    }
+
+    .verification-code-container {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      justify-content: center;
+    }
+
+    .verification-digit {
+      width: 60px;
+      height: 60px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 600;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      margin-bottom: 0;
+    }
+
+    .verification-digit:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .address-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 10;
+      display: none;
+    }
+
+    .address-suggestion {
+      padding: 16px;
+      cursor: pointer;
+      font-size: 14px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .address-suggestion:hover {
+      background: #f9fafb;
+    }
+
+    .address-suggestion:last-child {
+      border-bottom: none;
+    }
+
+    .address-input-container {
+      position: relative;
+    }
+
+    .domain-preview {
+      background: #f0f9ff;
+      border: 2px solid #0ea5e9;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #0c4a6e;
+      text-align: center;
+    }
+
+    .domain-url {
+      font-weight: 600;
+      color: #0ea5e9;
+      font-family: monospace;
+      font-size: 16px;
+    }
+
+    .disclaimer {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    button {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Jaldi', sans-serif;
+      background: #4f46e5;
+      color: white;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    button:hover:not(:disabled) {
+      background: #4338ca;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+    }
+
+    button:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .button-secondary {
+      background: #6b7280;
+      margin-top: 16px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .button-secondary:hover {
+      background: #4b5563;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 32px;
+      gap: 12px;
+    }
+
+    .step {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #e5e7eb;
+    }
+
+    .step.active {
+      background: #2A5BBE;
+    }
+
+    .step.completed {
+      background: #10b981;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .error-message {
+      color: #ef4444;
+      font-size: 14px;
+      margin-top: -16px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .success-message {
+      color: #10b981;
+      font-size: 14px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      margin: 32px 0;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      width: 0%;
+      transition: width 1s ease;
+      border-radius: 4px;
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .email-sent-animation {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .checkmark {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #10b981;
+      margin: 0 auto 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 32px;
+    }
+
+    .url-info {
+      /* background: #f0f9ff;
+      border-radius: 12px;
+      padding: 20px; */
+      margin: 24px 0;
+      text-align: left;
+    }
+
+    .url-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .url-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .url-label {
+      font-weight: 600;
+      color: #374151;
+      font-size: 14px;
+    }
+
+    .url-value {
+      font-family: monospace;
+      color: #0ea5e9;
+      font-weight: 600;
+      font-size: 14px;
+      word-break: break-all;
+    }
+
+    .footer {
+    text-align: center;
+    position: relative;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    /* display: flex
+; */
+    /* align-items: center; */
+    /* gap: 8px; */
+    color: #6b7280;
+    font-size: 14px;
+    }
+
+    .footer-logo {
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 10px;
+    }
+    .footer .logo-icon{
+        width: 60%;
+        height: 18px;     /* or use 1em to match text */
+        width: auto;
+        vertical-align: middle;
+        margin-left: 6px;
+        display: inline-block;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .branding-side {
+        padding: 20px;
+        text-align: center;
+      }
+      
+      .main-heading {
+        font-size: 32px;
+      }
+      
+      .form-container {
+        padding: 24px;
+      }
+      
+      body {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Left Side - Branding -->
+    <div class="branding-side">
+      <div class="logo">
+          <a href="https://masjidsolutions.net/">
+              <img src="https://masjidsolutions.net/wp-content/uploads/2024/11/PNG-1-3.png" 
+                  alt="Masjid Solutions Logo" 
+                  class="logo-icon" />
+          </a>
+      </div>
+      
+      <h1 class="main-heading">School Website Generator</h1>
+      <p class="sub-heading">Generate a website for your school in minutes</p>
+      
+      <div class="contact-info">
+          <div>
+              <!-- Location Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C8.14 2 5 5.14 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.86-3.14-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 
+              2.5 2.5 0 0 1 0 5z"/>
+              </svg>
+              Indianapolis, Indiana, USA
+          </div>
+
+          <div>
+              <!-- Phone Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 
+              1.01-.24c1.12.37 2.33.57 3.58.57.55 0 1 .45 1 
+              1V20c0 .55-.45 1-1 1C10.61 21 3 13.39 3 
+              4c0-.55.45-1 1-1h3.5c.55 0 1 .45 
+              1 1 0 1.25.2 2.46.57 3.58.11.34.03.72-.24 
+              1.01l-2.21 2.2z"/>
+              </svg>
+              +13178540207
+          </div>
+
+          <div>
+              <!-- Email Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20 4H4c-1.1 0-2 .9-2 
+              2v12c0 1.1.9 2 2 2h16c1.1 0 
+              2-.9 2-2V6c0-1.1-.9-2-2-2zm0 
+              4-8 5-8-5V6l8 5 8-5v2z"/>
+              </svg>
+              support@masjidSolutions.net
+          </div>
+
+          <a href="https://masjidsolutions.net/" class="visit-link">
+              <!-- External Link Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M14 3h7v7h-2V6.41l-9.29 
+              9.3-1.42-1.42L17.59 5H14V3zM5 
+              5h5V3H5c-1.1 0-2 .9-2 
+              2v14c0 1.1.9 2 2 2h14c1.1 0 
+              2-.9 2-2v-5h-2v5H5V5z"/>
+              </svg>
+              Visit Website ↗
+          </a>
+          </div>
+      </div>
+
+    <!-- Right Side - Form -->
+    <div class="form-side">
+      <div class="form-container">
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+          <div class="step active" id="step1"></div>
+          <div class="step" id="step2"></div>
+        </div>
+
+        <!-- Step 1: Email Verification -->
+        <form id="emailForm">
+          <h2>Verify Your Email</h2>
+          <p>Enter your email address to get started with creating your school website.</p>
+          
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="ashiqur@techknowworld.com" required>
+          
+          <label for="confirmEmail">Confirm Email Address</label>
+          <input type="email" id="confirmEmail" placeholder="ashiqur@techknowworld.com" required>
+          <div class="error-message hidden" id="emailError"></div>
+          
+          <button type="submit" id="sendVerificationBtn">Send Verification Code</button>
+        </form>
+
+        <!-- Email Verification Code -->
+        <form id="verificationForm" class="hidden">
+          <h2>Enter Verification Code</h2>
+          <p>We've sent a 6-digit code to your email address. Enter it below to continue.</p>
+          
+          <div class="verification-code-container">
+            <input type="text" class="verification-digit" maxlength="1" id="digit1">
+            <input type="text" class="verification-digit" maxlength="1" id="digit2">
+            <input type="text" class="verification-digit" maxlength="1" id="digit3">
+            <input type="text" class="verification-digit" maxlength="1" id="digit4">
+            <input type="text" class="verification-digit" maxlength="1" id="digit5">
+            <input type="text" class="verification-digit" maxlength="1" id="digit6">
+          </div>
+          <div class="error-message hidden" id="verificationError"></div>
+          <div class="success-message hidden" id="verificationSuccess">Email verified successfully!</div>
+          
+          <button type="submit" id="verifyCodeBtn">Verify Code</button>
+          <button type="button" class="button-secondary" id="resendCodeBtn">Resend Code</button>
+        </form>
+
+        <!-- Step 2: School Information -->
+        <form id="schoolForm" class="hidden">
+          <h2>School Information</h2>
+          <p>Tell us about your school to create your website.</p>
+
+          <label for="schoolName">School Name</label>
+          <input type="text" id="schoolName" placeholder="Demo School" required>
+
+          <label for="schoolAddress">School Address</label>
+          <div class="address-input-container">
+            <input type="text" id="schoolAddress" placeholder="Start typing your address..." required>
+            <div class="address-suggestions" id="addressSuggestions"></div>
+          </div>
+
+          <label for="shortName">School Short Name</label>
+          <input type="text" id="shortName" placeholder="demo-school" required>
+          
+          <div class="disclaimer">
+            ⚠️ <strong>Important:</strong> The short name will be used as your website domain name and cannot be changed later.
+          </div>
+
+          <div class="domain-preview" id="domainPreview">
+            Your website will be: <br><span class="domain-url">yourschool.masjidsolutions.net</span>
+          </div>
+
+          <button type="submit" id="createWebsiteBtn">Create Website</button>
+        </form>
+
+        <!-- Website Creation Progress -->
+        <div id="creationProgress" class="hidden">
+          <h2>Creating Your Website</h2>
+          <p>Please wait while we set up your school website...</p>
+          
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-steps">
+              <span id="step1Text">Setting up domain</span>
+              <span id="step2Text">Installing templates</span>
+              <span id="step3Text">Configuring settings</span>
+              <span id="step4Text">Sending credentials</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success Page -->
+        <div id="successPage" class="hidden">
+          <div class="email-sent-animation">
+            <div class="checkmark">✓</div>
+            <h2>Website Created Successfully!</h2>
+            <p>Your school website has been created and is ready to use. We've sent login credentials and setup instructions to your email address.</p>
+            
+            <div class="url-info">
+              <div class="url-row">
+                <span class="url-label">Website URL:</span>
+                <span class="url-value" id="finalDomainUrl">yourschool.schoolsite.com</span>
+              </div>
+              <div class="url-row">
+                <span class="url-label">Portal URL:</span>
+                <span class="url-value" id="finalPortalUrl">https://secure-api.net/yourschool</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-logo">M</div>
+    <span>Powered by <strong>Masjid Solutions</strong> (317) 854 0207</span>
+  </div>
+
+  <script>
+    // North American addresses for suggestions
+    const northAmericanAddresses = [
+      "123 Main Street, New York, NY 10001, USA",
+      "456 Oak Avenue, Los Angeles, CA 90210, USA", 
+      "789 Elm Street, Chicago, IL 60601, USA",
+      "321 Pine Road, Toronto, ON M5V 3A8, Canada",
+      "654 Maple Drive, Houston, TX 77001, USA",
+      "987 Cedar Lane, Vancouver, BC V6B 1A1, Canada",
+      "147 Birch Street, Phoenix, AZ 85001, USA",
+      "258 Spruce Avenue, Philadelphia, PA 19101, USA",
+      "369 Walnut Boulevard, San Antonio, TX 78201, USA",
+      "741 Cherry Street, San Diego, CA 92101, USA",
+      "852 Ash Road, Dallas, TX 75201, USA",
+      "963 Hickory Lane, San Jose, CA 95101, USA"
+    ];
+
+    // Form elements
+    const emailForm = document.getElementById('emailForm');
+    const verificationForm = document.getElementById('verificationForm');
+    const schoolForm = document.getElementById('schoolForm');
+    const creationProgress = document.getElementById('creationProgress');
+    const successPage = document.getElementById('successPage');
+
+    const emailInput = document.getElementById('email');
+    const confirmEmailInput = document.getElementById('confirmEmail');
+    const shortNameInput = document.getElementById('shortName');
+    const schoolAddressInput = document.getElementById('schoolAddress');
+    const addressSuggestions = document.getElementById('addressSuggestions');
+    const domainPreview = document.getElementById('domainPreview');
+
+    let verificationCode = '';
+
+    // Step 1: Email Form Submission
+    emailForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = emailInput.value;
+      const confirmEmail = confirmEmailInput.value;
+      const emailError = document.getElementById('emailError');
+
+      if (email !== confirmEmail) {
+        emailError.textContent = "Email addresses don't match";
+        emailError.classList.remove('hidden');
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        emailError.textContent = "Please enter a valid email address";
+        emailError.classList.remove('hidden');
+        return;
+      }
+
+      emailError.classList.add('hidden');
+      
+      // Set verification code to 123456 for demo purposes
+      verificationCode = '123456';
+      console.log('Demo verification code: 123456'); 
+      
+      // Show verification form
+      emailForm.classList.add('hidden');
+      verificationForm.classList.remove('hidden');
+      document.getElementById('step1').classList.add('completed');
+      document.getElementById('step1').classList.remove('active');
+      document.getElementById('step2').classList.add('active');
+    });
+
+    // Verification code input handling
+    const digitInputs = document.querySelectorAll('.verification-digit');
+    digitInputs.forEach((input, index) => {
+      input.addEventListener('input', function(e) {
+        if (e.target.value.length === 1) {
+          if (index < digitInputs.length - 1) {
+            digitInputs[index + 1].focus();
+          }
+        }
+      });
+
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+          digitInputs[index - 1].focus();
+        }
+      });
+    });
+
+    // Verification form submission
+    verificationForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const enteredCode = Array.from(digitInputs).map(input => input.value).join('');
+      const verificationError = document.getElementById('verificationError');
+      const verificationSuccess = document.getElementById('verificationSuccess');
+
+      console.log('Entered code:', enteredCode);
+      console.log('Expected code:', verificationCode);
+
+      if (enteredCode === '123456' || enteredCode === verificationCode) {
+        verificationError.classList.add('hidden');
+        verificationSuccess.classList.remove('hidden');
+        
+        setTimeout(() => {
+          verificationForm.classList.add('hidden');
+          schoolForm.classList.remove('hidden');
+        }, 1000);
+      } else {
+        verificationError.textContent = `Invalid verification code. Please enter: 123456`;
+        verificationError.classList.remove('hidden');
+        verificationSuccess.classList.add('hidden');
+      }
+    });
+
+    // Resend verification code
+    document.getElementById('resendCodeBtn').addEventListener('click', function() {
+      verificationCode = '123456';
+      console.log('Demo verification code: 123456');
+      alert('New verification code sent! Use: 123456');
+    });
+
+    // Address suggestions
+    schoolAddressInput.addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      if (query.length < 2) {
+        addressSuggestions.style.display = 'none';
+        return;
+      }
+
+      const filteredAddresses = northAmericanAddresses.filter(address => 
+        address.toLowerCase().includes(query)
+      );
+
+      if (filteredAddresses.length > 0) {
+        addressSuggestions.innerHTML = filteredAddresses
+          .slice(0, 5)
+          .map(address => `<div class="address-suggestion" onclick="selectAddress('${address}')">${address}</div>`)
+          .join('');
+        addressSuggestions.style.display = 'block';
+      } else {
+        addressSuggestions.style.display = 'none';
+      }
+    });
+
+    function selectAddress(address) {
+      schoolAddressInput.value = address;
+      addressSuggestions.style.display = 'none';
+    }
+
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.address-input-container')) {
+        addressSuggestions.style.display = 'none';
+      }
+    });
+
+    // Short name input and domain preview
+    shortNameInput.addEventListener('input', function() {
+      const shortName = this.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+      this.value = shortName;
+      
+      if (shortName) {
+        domainPreview.innerHTML = `Your website will be: <br><span class="domain-url">${shortName}.masjidsolutions.net</span>`;
+      } else {
+        domainPreview.innerHTML = `Your website will be: <br><span class="domain-url">yourschool.masjidsolutions.net</span>`;
+      }
+    });
+
+    // School form submission
+    schoolForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const schoolName = document.getElementById('schoolName').value;
+      const schoolAddress = document.getElementById('schoolAddress').value;
+      const shortName = shortNameInput.value;
+
+      if (!schoolName || !schoolAddress || !shortName) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      // Show creation progress
+      schoolForm.classList.add('hidden');
+      creationProgress.classList.remove('hidden');
+      
+      simulateWebsiteCreation(shortName);
+    });
+
+    function simulateWebsiteCreation(shortName) {
+      const progressFill = document.getElementById('progressFill');
+      const steps = [
+        { text: 'Setting up domain...', progress: 25 },
+        { text: 'Installing templates...', progress: 50 },
+        { text: 'Configuring settings...', progress: 75 },
+        { text: 'Sending credentials...', progress: 100 }
+      ];
+
+      let currentStep = 0;
+
+      function nextStep() {
+        if (currentStep < steps.length) {
+          progressFill.style.width = steps[currentStep].progress + '%';
+          
+          setTimeout(() => {
+            currentStep++;
+            if (currentStep < steps.length) {
+              nextStep();
+            } else {
+              // Show success page
+              setTimeout(() => {
+                creationProgress.classList.add('hidden');
+                successPage.classList.remove('hidden');
+                document.getElementById('finalDomainUrl').textContent = `${shortName}.masjidsolutions.net`;
+                document.getElementById('finalPortalUrl').textContent = `https://secure-api.net/${shortName}`;
+              }, 1000);
+            }
+          }, 1500);
+        }
+      }
+
+      nextStep();
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+  </script>
+
+</body>
+</html>
