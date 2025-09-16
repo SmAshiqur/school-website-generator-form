@@ -40,12 +40,20 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 12px;
       margin-bottom: 24px;
+        margin-left: 0;
+
+    }
+
+    .logo a{
+      display: flex;
+      align-items: left;
     }
 
     .logo-icon {
-      /* border: 1px solid #ececec; */
+      border: 1px solid #dcdcdc;
+      padding: 6px;
+      width: 70%;
       border-radius: 8px;
       align-items: center;
       justify-content: center;
@@ -66,6 +74,7 @@
       color: #1f2937;
       line-height: 1.2;
       margin-bottom: 16px;
+      text-align: left;
     }
 
     .sub-heading {
@@ -416,6 +425,7 @@
     .footer {
     text-align: center;
     position: relative;
+    padding: 24px;
     bottom: 0px;
     left: 50%;
     transform: translateX(-50%);
@@ -461,7 +471,11 @@
       }
       
       .main-heading {
-        font-size: 32px;
+        font-size: 46px;
+      }
+
+      .sub-heading{
+        font-size: 22px;
       }
       
       .form-container {
@@ -525,6 +539,8 @@
           </div>
 
           <a href="https://masjidsolutions.net/" class="visit-link">
+         
+              Visit Website
               <!-- External Link Icon -->
               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
               <path d="M14 3h7v7h-2V6.41l-9.29 
@@ -533,7 +549,6 @@
               2v14c0 1.1.9 2 2 2h14c1.1 0 
               2-.9 2-2v-5h-2v5H5V5z"/>
               </svg>
-              Visit Website ↗
           </a>
           </div>
       </div>
@@ -597,8 +612,17 @@
           </div>
 
           <label for="shortName">School Short Name</label>
-          <input type="text" id="shortName" placeholder="demo-school" required>
-          
+          <!-- <input type="text" id="shortName" placeholder="demo-school" required> -->
+          <input 
+            type="text" 
+            id="shortName" 
+            name="shortName" 
+            minlength="3" 
+            maxlength="10" 
+            required 
+            placeholder="e.g. demo-school" 
+          />
+                    
           <div class="disclaimer">
             ⚠️ <strong>Important:</strong> The short name will be used as your website domain name and cannot be changed later.
           </div>
@@ -638,13 +662,28 @@
             <div class="url-info">
               <div class="url-row">
                 <span class="url-label">Website URL:</span>
-                <span class="url-value" id="finalDomainUrl">yourschool.schoolsite.com</span>
+                <a id="finalDomainUrl" class="url-value" href="#" target="_blank"></a>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M14 3h7v7h-2V6.41l-9.29 
+                  9.3-1.42-1.42L17.59 5H14V3zM5 
+                  5h5V3H5c-1.1 0-2 .9-2 
+                  2v14c0 1.1.9 2 2 2h14c1.1 0 
+                  2-.9 2-2v-5h-2v5H5V5z"/>
+                </svg>
               </div>
               <div class="url-row">
                 <span class="url-label">Portal URL:</span>
-                <span class="url-value" id="finalPortalUrl">https://secure-api.net/yourschool</span>
+                <a id="finalPortalUrl" class="url-value" href="#" target="_blank"></a>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M14 3h7v7h-2V6.41l-9.29 
+                  9.3-1.42-1.42L17.59 5H14V3zM5 
+                  5h5V3H5c-1.1 0-2 .9-2 
+                  2v14c0 1.1.9 2 2 2h14c1.1 0 
+                  2-.9 2-2v-5h-2v5H5V5z"/>
+                </svg>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -657,6 +696,23 @@
   </div>
 
   <script>
+
+    // Example values you already generate dynamically
+    const domainUrl = "https://yourschool.masjidsolutions.net";
+    const portalUrl = "https://yourschool.masjidsolutions.net/portal";
+
+    // Grab anchors
+    const domainEl = document.getElementById("finalDomainUrl");
+    const portalEl = document.getElementById("finalPortalUrl");
+
+    // Update href + text together
+    domainEl.href = domainUrl;
+    domainEl.textContent = domainUrl;
+
+    portalEl.href = portalUrl;
+    portalEl.textContent = portalUrl;
+
+
     // North American addresses for suggestions
     const northAmericanAddresses = [
       "123 Main Street, New York, NY 10001, USA",
@@ -683,6 +739,16 @@
     const emailInput = document.getElementById('email');
     const confirmEmailInput = document.getElementById('confirmEmail');
     const shortNameInput = document.getElementById('shortName');
+    shortNameInput.addEventListener("input", () => {
+      if (shortNameInput.value.length < 3) {
+        shortNameInput.setCustomValidity("Short Name must be at least 3 characters.");
+      } else if (shortNameInput.value.length > 10) {
+        shortNameInput.setCustomValidity("Short Name cannot be longer than 10 characters.");
+      } else {
+        shortNameInput.setCustomValidity(""); // reset
+      }
+    });
+
     const schoolAddressInput = document.getElementById('schoolAddress');
     const addressSuggestions = document.getElementById('addressSuggestions');
     const domainPreview = document.getElementById('domainPreview');
