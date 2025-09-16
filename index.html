@@ -429,10 +429,6 @@
     bottom: 0px;
     left: 50%;
     transform: translateX(-50%);
-    /* display: flex
-; */
-    /* align-items: center; */
-    /* gap: 8px; */
     color: #6b7280;
     font-size: 14px;
     }
@@ -663,24 +659,10 @@
               <div class="url-row">
                 <span class="url-label">Website URL:</span>
                 <a id="finalDomainUrl" class="url-value" href="#" target="_blank"></a>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14 3h7v7h-2V6.41l-9.29 
-                  9.3-1.42-1.42L17.59 5H14V3zM5 
-                  5h5V3H5c-1.1 0-2 .9-2 
-                  2v14c0 1.1.9 2 2 2h14c1.1 0 
-                  2-.9 2-2v-5h-2v5H5V5z"/>
-                </svg>
               </div>
               <div class="url-row">
                 <span class="url-label">Portal URL:</span>
                 <a id="finalPortalUrl" class="url-value" href="#" target="_blank"></a>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14 3h7v7h-2V6.41l-9.29 
-                  9.3-1.42-1.42L17.59 5H14V3zM5 
-                  5h5V3H5c-1.1 0-2 .9-2 
-                  2v14c0 1.1.9 2 2 2h14c1.1 0 
-                  2-.9 2-2v-5h-2v5H5V5z"/>
-                </svg>
               </div>
             </div>
 
@@ -697,20 +679,6 @@
 
   <script>
 
-    // Example values you already generate dynamically
-    const domainUrl = "https://yourschool.masjidsolutions.net";
-    const portalUrl = "https://yourschool.masjidsolutions.net/portal";
-
-    // Grab anchors
-    const domainEl = document.getElementById("finalDomainUrl");
-    const portalEl = document.getElementById("finalPortalUrl");
-
-    // Update href + text together
-    domainEl.href = domainUrl;
-    domainEl.textContent = domainUrl;
-
-    portalEl.href = portalUrl;
-    portalEl.textContent = portalUrl;
 
 
     // North American addresses for suggestions
@@ -885,6 +853,33 @@
       }
     });
 
+    // Helper that sets href and visible content (with icon) safely
+function setDynamicLink(anchorId, urlText, hrefUrl) {
+  const el = document.getElementById(anchorId);
+  if (!el) return;
+  // safe text: escape special chars for text node
+  const safeText = document.createTextNode(urlText);
+
+  // external icon (small inline svg) — you can style .external-icon in CSS
+  const iconSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="external-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+      <polyline points="15 3 21 3 21 9"></polyline>
+      <line x1="10" y1="14" x2="21" y2="3"></line>
+    </svg>
+      `;
+
+      // ensure hrefUrl has protocol (if user provided shortname only we build full url elsewhere)
+      el.setAttribute('href', hrefUrl);
+      el.setAttribute('target', '_blank');
+      // set innerHTML: text (escaped) + icon
+      // using a text node avoids innerHTML injection of user data
+      el.innerHTML = '';               // clear old content
+      el.appendChild(safeText);        // append plain text node
+      el.insertAdjacentHTML('beforeend', ' ' + iconSvg); // append svg
+    }
+
+
     // School form submission
     schoolForm.addEventListener('submit', function(e) {
       e.preventDefault();
@@ -929,8 +924,14 @@
               setTimeout(() => {
                 creationProgress.classList.add('hidden');
                 successPage.classList.remove('hidden');
-                document.getElementById('finalDomainUrl').textContent = `${shortName}.masjidsolutions.net`;
-                document.getElementById('finalPortalUrl').textContent = `https://secure-api.net/${shortName}`;
+              // Build canonical URLs (always include protocol)
+                const domainHref = `https://${encodeURIComponent(shortName)}.masjidsolutions.net`;
+                const domainText = `${shortName}.masjidsolutions.net`;
+                const portalHref = `https://secure-api.net/${encodeURIComponent(shortName)}`;
+                const portalText = portalHref; // full portal url shown
+
+                setDynamicLink('finalDomainUrl', domainText, domainHref);
+                setDynamicLink('finalPortalUrl', portalText, portalHref);
               }, 1000);
             }
           }, 1500);
